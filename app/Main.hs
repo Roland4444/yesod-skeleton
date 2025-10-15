@@ -9,15 +9,16 @@
 {-# LANGUAGE TemplateHaskell       #-}
 {-# LANGUAGE TypeFamilies          #-}
 module Main where
-import           Yesod
-import Network.HTTP.Types (status200, hContentType)
-import Network.HTTP.Types (status404, hContentType)
+import              Yesod
+import              Network.HTTP.Types                  (status200, hContentType)
+import              Network.HTTP.Types                  (status404, hContentType)
 
-import Network.Wai (responseBuilder)
-import Network.HTTP.Types (status200)
+import              Network.Wai                         (responseBuilder)
+import              Network.HTTP.Types                  (status200)
 
-import Data.ByteString.Lazy.Char8 (pack)
-import qualified Data.ByteString.Char8 as BS
+import              Data.ByteString.Lazy.Char8          (pack)
+import qualified    Data.ByteString.Char8 as BS
+
 data HelloWorld = HelloWorld
 
 mkYesod "HelloWorld" [parseRoutes|
@@ -30,8 +31,6 @@ instance Yesod HelloWorld
 
 getHomeR :: Handler Html
 getHomeR = defaultLayout [whamlet|Hello World!|]
-
-
 
 getDirectR :: Handler TypedContent
 getDirectR = sendWaiResponse $ responseBuilder status200 [("Content-Type", "text/plain")] "Hello RAW!"

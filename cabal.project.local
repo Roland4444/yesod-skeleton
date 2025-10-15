@@ -1,0 +1,4 @@
+ignore-project: False
+tests: True
+profiling: True
+allow-newer: base

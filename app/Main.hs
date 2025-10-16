@@ -4,6 +4,10 @@
 --https://www.programmer-books.com/wp-content/uploads/2019/04/Haskell-High-Performance-Programming.pdf
 --https://github.com/yesodweb/yesod/wiki/Powered-by-Yesod
 --https://www.yesodweb.com/book
+
+
+
+-- LINK:: https://apprize.best/programming/haskell/5.html
 {-# LANGUAGE OverloadedStrings     #-}
 {-# LANGUAGE QuasiQuotes           #-}
 {-# LANGUAGE TemplateHaskell       #-}

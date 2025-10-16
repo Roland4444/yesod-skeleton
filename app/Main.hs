@@ -13,6 +13,14 @@
 {-# LANGUAGE TemplateHaskell       #-}
 {-# LANGUAGE TypeFamilies          #-}
 module Main where
+
+import              Text.Hamlet                         (shamlet)
+
+import              Text.Blaze.Html.Renderer.String     (renderHtml)
+
+import              Data.Char                           (toLower)
+
+import              Data.List                           (sort)    
 import              Yesod
 import              Network.HTTP.Types                  (status200, hContentType)
 import              Network.HTTP.Types                  (status404, hContentType)
@@ -39,16 +47,72 @@ getHomeR = defaultLayout [whamlet|Hello World!|]
 getDirectR :: Handler TypedContent
 getDirectR = sendWaiResponse $ responseBuilder status200 [("Content-Type", "text/plain")] "Hello RAW!"
 
-main :: IO ()
-main = do 
-    putStrLn "*********************************************************"
-    putStrLn "*********************************************************"
-    putStrLn "***  ***************************************    ****  ***"
-    putStrLn "***  *******                           *****  ** ***  ***"
-    putStrLn "***  *******STARTUP SERVER AT PORT 3000*****  *** **  ***"
-    putStrLn "***  *******                           *****  **** *  ***"
-    putStrLn "***  ***************************************  *****   ***"
-    putStrLn "***       **********************************  ******  ***"
-    putStrLn "*********************************************************"
+data Person = Person{ name ::String, age ::Int}
 
-    warp 3000 HelloWorld
+main ::IO ()
+
+main =putStrLn $ renderHtml [shamlet|
+
+<p>Hello, my name is #{name person} and I am #{show $ age person}.
+
+<p>
+
+Let'sdo some funny stuff with my name: #
+
+<b>#{sort $ map toLower (name person)}
+
+<p>Oh, and in 5 years I'll be #{show ((+) 5 (age person))} years old.
+
+|] where person =Person "Michael" 26
+    -- putStrLn "*********************************************************"
+    -- putStrLn "*********************************************************"
+    -- putStrLn "***  ***************************************    ****  ***"
+    -- putStrLn "***  *******                           *****  ** ***  ***"
+    -- putStrLn "***  *******STARTUP SERVER AT PORT 3000*****  *** **  ***"
+    -- putStrLn "***  *******                           *****  **** *  ***"
+    -- putStrLn "***  ***************************************  *****   ***"
+    -- putStrLn "***       **********************************  ******  ***"
+    -- putStrLn "*********************************************************"
+
+
+    -- putStrLn $ renderHtml [shamlet|
+
+    --         <p>Hello, my name is #{name person} and I am #{show $ age person}.
+    --         <p>Let'sdo some funny stuff with my name: #
+    --         <b>#{sort $ map toLower (name person)}
+    --         <p>Oh, and in 5 years I'll be #{show ((+) 5 (age person))} years old.
+    -- |]    where person =Person "Michael" 26
+
+    -- warp 3000 HelloWorld
+
+
+
+
+------CHECK
+
+-- {-# LANGUAGE QuasiQuotes #-}
+-- import Text.Hamlet (shamletFile)
+-- import Text.Blaze.Html.Renderer.String (renderHtml)
+-- import Data.Char (toLower)
+-- import Data.List (sort)
+
+-- data Person = Person
+--     { name :: String
+--     , age  :: Int
+--     }
+
+-- main :: IO ()
+-- main = do
+--     let person = Person "Michael" 26
+--     html <- shamletFile "template.hamlet" person
+--     putStrLn $ renderHtml html
+
+
+------
+
+
+-- <p>Hello, my name is #{name person} and I am #{show $ age person}.
+-- <p>
+--     Let's do some funny stuff with my name: #
+--     <b>#{sort $ map toLower (name person)}
+-- <p>Oh, and in 5 years I'll be #{show ((+) 5 (age person))} years old.

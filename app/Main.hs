@@ -36,4 +36,15 @@ getDirectR :: Handler TypedContent
 getDirectR = sendWaiResponse $ responseBuilder status200 [("Content-Type", "text/plain")] "Hello RAW!"
 
 main :: IO ()
-main = warp 3000 HelloWorld
+main = do 
+    putStrLn "*********************************************************"
+    putStrLn "*********************************************************"
+    putStrLn "***  ***************************************    ****  ***"
+    putStrLn "***  *******                           *****  ** ***  ***"
+    putStrLn "***  *******STARTUP SERVER AT PORT 3000*****  *** **  ***"
+    putStrLn "***  *******                           *****  **** *  ***"
+    putStrLn "***  ***************************************  *****   ***"
+    putStrLn "***       **********************************  ******  ***"
+    putStrLn "*********************************************************"
+
+    warp 3000 HelloWorld

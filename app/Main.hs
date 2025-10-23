@@ -51,39 +51,36 @@ data Person = Person{ name ::String, age ::Int}
 
 main ::IO ()
 
-main =putStrLn $ renderHtml [shamlet|
+main = do
+    
+    let person = Person "Michael" 26    
+    
+    putStrLn $ renderHtml [shamlet|
+        <p>Hello, my name is #{name person} and I am #{show $ age person}.
+        <p>
+        Let'sdo some funny stuff with my name: #
+        <b>#{sort $ map toLower (name person)}
+        <p>Oh, and in 5 years I'll be #{show ((+) 5 (age person))} years old.
+    |]
 
-<p>Hello, my name is #{name person} and I am #{show $ age person}.
+    putStrLn "*********************************************************"
+    putStrLn "*********************************************************"
+    putStrLn "***  ***************************************    ****  ***"
+    putStrLn "***  *******                           *****  ** ***  ***"
+    putStrLn "***  *******STARTUP SERVER AT PORT 3000*****  *** **  ***"
+    putStrLn "***  *******                           *****  **** *  ***"
+    putStrLn "***  ***************************************  *****   ***"
+    putStrLn "***       **********************************  ******  ***"
+    putStrLn "*********************************************************"
 
-<p>
+    putStrLn $ renderHtml [shamlet|
+        <p>Hello, my name is #{name person} and I am #{show $ age person}.
+        <p>Let'sdo some funny stuff with my name: #
+        <b>#{sort $ map toLower (name person)}
+        <p>Oh, and in 5 years I'll be #{show ((+) 5 (age person))} years old.
+    |]   
 
-Let'sdo some funny stuff with my name: #
-
-<b>#{sort $ map toLower (name person)}
-
-<p>Oh, and in 5 years I'll be #{show ((+) 5 (age person))} years old.
-
-|] where person =Person "Michael" 26
-    -- putStrLn "*********************************************************"
-    -- putStrLn "*********************************************************"
-    -- putStrLn "***  ***************************************    ****  ***"
-    -- putStrLn "***  *******                           *****  ** ***  ***"
-    -- putStrLn "***  *******STARTUP SERVER AT PORT 3000*****  *** **  ***"
-    -- putStrLn "***  *******                           *****  **** *  ***"
-    -- putStrLn "***  ***************************************  *****   ***"
-    -- putStrLn "***       **********************************  ******  ***"
-    -- putStrLn "*********************************************************"
-
-
-    -- putStrLn $ renderHtml [shamlet|
-
-    --         <p>Hello, my name is #{name person} and I am #{show $ age person}.
-    --         <p>Let'sdo some funny stuff with my name: #
-    --         <b>#{sort $ map toLower (name person)}
-    --         <p>Oh, and in 5 years I'll be #{show ((+) 5 (age person))} years old.
-    -- |]    where person =Person "Michael" 26
-
-    -- warp 3000 HelloWorld
+    warp 3000 HelloWorld
 
 
 

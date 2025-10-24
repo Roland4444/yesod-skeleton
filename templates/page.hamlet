@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Страница с картинкой
+        <meta charset="UTF-8">
+    <body>
+        <h1>Моя страница с картинкой
+        <p>Это пример страницы, сгенерированной из Hamlet-файла
+        <div .image-container>
+            <img src="/static/images/photo.jpg" alt="Мое изображение">
+        <p>Картинка загружена из статических файлов

@@ -1,0 +1,5 @@
+<p>Hello, my name is #{name} and I am #{show age}.
+<p>
+Let's do some funny stuff with my name: #
+<b>#{sort $ map toLower name}
+<p>Oh, and in 5 years I'll be #{show $ age + 5} years old.

@@ -12,31 +12,27 @@
 {-# LANGUAGE QuasiQuotes           #-}
 {-# LANGUAGE TemplateHaskell       #-}
 {-# LANGUAGE TypeFamilies          #-}
+
 module Main where
 
-import              Text.Hamlet                         (shamlet)
-
-import              Text.Blaze.Html.Renderer.String     (renderHtml)
-
-import              Data.Char                           (toLower)
-
-import              Data.List                           (sort)    
-import              Yesod
-import              Network.HTTP.Types                  (status200, hContentType)
-import              Network.HTTP.Types                  (status404, hContentType)
-
-import              Network.Wai                         (responseBuilder)
-import              Network.HTTP.Types                  (status200)
-
-import              Data.ByteString.Lazy.Char8          (pack)
-import qualified    Data.ByteString.Char8 as BS
+import Text.Hamlet (shamlet)
+import Text.Blaze.Html.Renderer.Utf8 (renderHtmlBuilder) -- Изменено!
+import Data.Char (toLower)
+import Data.List (sort)
+import Yesod
+import Network.HTTP.Types (status200, status404, hContentType)
+import Network.Wai (responseBuilder)
+import qualified Data.ByteString.Lazy as LBS
+import Data.Text (Text)
+import Blaze.ByteString.Builder (toByteString) -- Добавлено!
+import Text.Blaze.Html.Renderer.Utf8'
 
 data HelloWorld = HelloWorld
 
 mkYesod "HelloWorld" [parseRoutes|
 / HomeR GET
 /raw DirectR GET
--- /static StaticR Static getStatic
+/isr IsraelR GET
 |]
 
 instance Yesod HelloWorld
@@ -45,41 +41,39 @@ getHomeR :: Handler Html
 getHomeR = defaultLayout [whamlet|Hello World!|]
 
 getDirectR :: Handler TypedContent
-getDirectR = sendWaiResponse $ responseBuilder status200 [("Content-Type", "text/plain")] "Hello RAW!"
+getDirectR = sendWaiResponse $ 
+    responseBuilder status200 [("Content-Type", "text/plain")] "Hello RAW!"
 
-data Person = Person{ name ::String, age ::Int}
+getIsraelR :: Handler TypedContent
+getIsraelR = do
+    let person2 = Person "Michael" 26
+    let htmlBuilder = renderHtmlBuilder [shamlet|
+<p>Hello, my name is #{name person2} and I am #{show $ age person2}.
+<p>
+    Let's do some funny stuff with my name: #
+<b>#{sort $ map toLower (name person2)}
+<p>Oh, and in 5 years I'll be #{show ((+) 5 (age person2))} years old.
+|]
+    sendWaiResponse $ responseBuilder status200 
+        [("Content-Type", "text/html")] htmlBuilder -- Изменено на text/html!
 
-main ::IO ()
+data Person = Person { name :: String, age :: Int }
 
+main :: IO ()
 main = do
-    
-    let person = Person "Michael" 26    
+    let person = Person "Michael" 26
     
     putStrLn $ renderHtml [shamlet|
-        <p>Hello, my name is #{name person} and I am #{show $ age person}.
-        <p>
-        Let'sdo some funny stuff with my name: #
-        <b>#{sort $ map toLower (name person)}
-        <p>Oh, and in 5 years I'll be #{show ((+) 5 (age person))} years old.
-    |]
+<p>Hello, my name is #{name person} and I am #{show $ age person}.
+<p>Let's do some funny stuff with my name: #
+<b>#{sort $ map toLower (name person)}
+<p>Oh, and in 5 years I'll be #{show ((+) 5 (age person))} years old.
+|]
 
     putStrLn "*********************************************************"
+    putStrLn "***  STARTUP SERVER AT PORT 3000                    ***"
     putStrLn "*********************************************************"
-    putStrLn "***  ***************************************    ****  ***"
-    putStrLn "***  *******                           *****  ** ***  ***"
-    putStrLn "***  *******STARTUP SERVER AT PORT 3000*****  *** **  ***"
-    putStrLn "***  *******                           *****  **** *  ***"
-    putStrLn "***  ***************************************  *****   ***"
-    putStrLn "***       **********************************  ******  ***"
-    putStrLn "*********************************************************"
-
-    putStrLn $ renderHtml [shamlet|
-        <p>Hello, my name is #{name person} and I am #{show $ age person}.
-        <p>Let'sdo some funny stuff with my name: #
-        <b>#{sort $ map toLower (name person)}
-        <p>Oh, and in 5 years I'll be #{show ((+) 5 (age person))} years old.
-    |]   
-
+    
     warp 3000 HelloWorld
 
 
